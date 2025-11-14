@@ -1,10 +1,4 @@
 <!DOCTYPE html>
-<!--[1]: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element?utm_source=chatgpt.com "SVG element reference - MDN Web Docs - Mozilla"
-[2]: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/svg?utm_source=chatgpt.com "<svg> - SVG - MDN Web Docs"
-[3]: https://developer.mozilla.org/en-US/docs/Web/API/SVGUseElement?utm_source=chatgpt.com "SVGUseElement - Web APIs | MDN"
-[4]: https://www.sugar.org/blog/the-candy-cane-an-iconic-treat/?utm_source=chatgpt.com "The Candy Cane: A Delectable Dive into History and ..."
-[5]: https://en.wikipedia.org/wiki/Candy_cane?utm_source=chatgpt.com "Candy cane"
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -146,7 +140,7 @@
       opacity: 0.9;
     }
 
-    /* Design canvases */
+    /* Panels */
 
     .panel {
       background: #ffffff;
@@ -155,13 +149,23 @@
       box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
 
     .panel h2 {
       font-size: 0.9rem;
       margin: 0;
       text-align: center;
+    }
+
+    .resize-controls {
+      text-align: center;
+      margin-bottom: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    .resize-controls input[type="range"] {
+      width: 95%;
     }
 
     .panel svg.design-svg {
@@ -195,14 +199,6 @@
       background: #ffeef1;
       border-color: #ffb2c2;
     }
-	.resize-controls {
-	  text-align: center;
-	  margin-bottom: 0.5rem;
-	  font-size: 0.75rem;
-	}
-	.resize-controls input {
-	  width: 90%;
-	}
 
     .legend {
       margin-top: 1.2rem;
@@ -339,24 +335,27 @@
       <!-- Candy cane panel -->
       <section class="panel" aria-label="Candy cane designer">
         <h2>Candy Cane</h2>
-		<div class="resize-controls">
-		  <label>
-		    Cane Size:
-		    <input type="range" id="caneScale" min="0.5" max="2.5" step="0.05" value="1">
-		  </label>
-		</div>
+        <div class="resize-controls">
+          <label>
+            Cane size
+            <input type="range" id="caneScale" min="0.6" max="2.0" step="0.05" value="1">
+          </label>
+        </div>
         <svg id="candySvg" class="design-svg" viewBox="0 0 200 260">
-          <!-- Base cane shape -->
-          <path d="M80 250 L80 130 Q80 70 130 70 Q160 70 170 85 L170 120 L160 120 L160 90 Q150 80 130 80 Q90 80 90 130 L90 250 Z"
-                fill="#ffffff"
-                stroke="#111111"
-                stroke-width="4"
-                stroke-linejoin="round" />
-          <!-- Decorative layer -->
-          <g class="decor-layer"></g>
+          <g id="candyScaleGroup" data-scale-group="true" transform="scale(1)">
+            <!-- Base cane shape -->
+            <path d="M80 250 L80 130 Q80 70 130 70 Q160 70 170 85 L170 120
+                     L160 120 L160 90 Q150 80 130 80 Q90 80 90 130 L90 250 Z"
+                  fill="#ffffff"
+                  stroke="#111111"
+                  stroke-width="4"
+                  stroke-linejoin="round" />
+            <!-- Decorative layer (inside scale group so it scales too) -->
+            <g class="decor-layer"></g>
+          </g>
         </svg>
         <div class="panel-footer">
-          <span>Click anywhere on the cane area to add motifs.</span>
+          <span>Click on the cane to add motifs.</span>
           <button class="btn-clear" id="clearCandy">Clear cane</button>
         </div>
       </section>
@@ -364,25 +363,34 @@
       <!-- Ornament panel -->
       <section class="panel" aria-label="Ornament designer">
         <h2>Christmas Ornament</h2>
+        <div class="resize-controls">
+          <label>
+            Ornament size
+            <input type="range" id="ornamentScale" min="0.6" max="2.0" step="0.05" value="1">
+          </label>
+        </div>
         <svg id="ornamentSvg" class="design-svg" viewBox="0 0 220 220">
-          <!-- Ornament cap and hook -->
-          <path d="M110 20
-                   C140 20 150 45 135 65"
-                fill="none"
-                stroke="#111111"
-                stroke-width="4"
-                stroke-linecap="round" />
-          <rect x="90" y="65" width="40" height="18" rx="4"
-                fill="#ffffff"
-                stroke="#111111"
-                stroke-width="4" />
-          <!-- Ornament circle -->
-          <circle cx="110" cy="140" r="70"
+          <g id="ornamentScaleGroup" data-scale-group="true" transform="scale(1)">
+            <!-- Ornament hook -->
+            <path d="M110 20
+                     C140 20 150 45 135 65"
+                  fill="none"
+                  stroke="#111111"
+                  stroke-width="4"
+                  stroke-linecap="round" />
+            <!-- Cap -->
+            <rect x="90" y="65" width="40" height="18" rx="4"
                   fill="#ffffff"
-                  stroke="#66bdf5"
-                  stroke-width="10" />
-          <!-- Decorative layer -->
-          <g class="decor-layer"></g>
+                  stroke="#111111"
+                  stroke-width="4" />
+            <!-- Ornament circle -->
+            <circle cx="110" cy="140" r="70"
+                    fill="#ffffff"
+                    stroke="#66bdf5"
+                    stroke-width="10" />
+            <!-- Decorative layer -->
+            <g class="decor-layer"></g>
+          </g>
         </svg>
         <div class="panel-footer">
           <span>Stamp icons inside the ornament ring.</span>
@@ -392,24 +400,14 @@
     </div>
 
     <div class="legend">
-      <strong>How it works:</strong> This tool uses inline SVG symbols and the
-      <code>&lt;use&gt;</code> element so that each decorative icon can be cloned
-      and recolored without additional image files. Click a symbol in the palette,
-      pick a color, and then click anywhere in the candy cane or ornament SVG to
-      place a copy. The designs remain vector based, so they are suitable for
-      scaling, printing, or exporting as SVG for other creative work.
+      <strong>Note:</strong> The sliders apply a scale transform to each
+      object&apos;s SVG group. Click positions are converted into the scaled
+      coordinate system, so decorations stay aligned even as you resize the
+      cane or ornament.
     </div>
-  </div><script>
-const caneScaleSlider = document.getElementById("caneScale");
-const caneScaleGroup = document.getElementById("candyScaleGroup");
+  </div>
 
-caneScaleSlider.addEventListener("input", () => {
-  const scaleValue = parseFloat(caneScaleSlider.value);
-  caneScaleGroup.setAttribute("transform", `scale(${scaleValue})`);
-});
-</script>
   <script>
-    // Shared SVG namespace
     const SVG_NS = "http://www.w3.org/2000/svg";
     const XLINK_NS = "http://www.w3.org/1999/xlink";
 
@@ -419,11 +417,15 @@ caneScaleSlider.addEventListener("input", () => {
     const ornamentSvg = document.getElementById("ornamentSvg");
     const clearCandy = document.getElementById("clearCandy");
     const clearOrnament = document.getElementById("clearOrnament");
+    const caneScaleSlider = document.getElementById("caneScale");
+    const ornamentScaleSlider = document.getElementById("ornamentScale");
+    const caneScaleGroup = document.getElementById("candyScaleGroup");
+    const ornamentScaleGroup = document.getElementById("ornamentScaleGroup");
 
     let selectedSymbolId = null;
     let currentColor = colorPicker.value;
 
-    // Style for icon strokes and fills via currentColor
+    // Define base style for icon strokes and fills
     const styleEl = document.createElement("style");
     styleEl.textContent = `
       .icon-shape {
@@ -436,7 +438,7 @@ caneScaleSlider.addEventListener("input", () => {
     `;
     document.head.appendChild(styleEl);
 
-    // Palette selection logic
+    // Palette selection
     paletteButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         selectedSymbolId = btn.dataset.symbol;
@@ -449,44 +451,44 @@ caneScaleSlider.addEventListener("input", () => {
       currentColor = evt.target.value;
     });
 
-    // Helper: convert mouse click to SVG coordinates
-    function svgPointFromEvent(svg, evt) {
+    // Generic helper: convert click to coordinates in the scale group
+    function svgPointInScaleGroup(svg, scaleGroup, evt) {
       const pt = svg.createSVGPoint();
       pt.x = evt.clientX;
       pt.y = evt.clientY;
-      const matrix = svg.getScreenCTM();
-      if (!matrix) {
+      const ctm = scaleGroup.getScreenCTM() || svg.getScreenCTM();
+      if (!ctm) {
         return null;
       }
-      return pt.matrixTransform(matrix.inverse());
+      return pt.matrixTransform(ctm.inverse());
     }
 
-    // Helper: stamp an icon onto an SVG
+    // Stamp handler
     function handleStamp(evt) {
       if (!selectedSymbolId) {
-        return; // nothing selected
+        return;
       }
       const svg = evt.currentTarget;
+      const scaleGroup = svg.querySelector('[data-scale-group="true"]');
       const decorLayer = svg.querySelector(".decor-layer");
-      if (!decorLayer) {
+      if (!scaleGroup || !decorLayer) {
         return;
       }
 
-      const svgPoint = svgPointFromEvent(svg, evt);
-      if (!svgPoint) {
+      const localPoint = svgPointInScaleGroup(svg, scaleGroup, evt);
+      if (!localPoint) {
         return;
       }
 
+      const size = 34;
       const useEl = document.createElementNS(SVG_NS, "use");
       useEl.setAttributeNS(XLINK_NS, "href", "#" + selectedSymbolId);
-      // Place icon centered at click
-      const size = 34;
-      useEl.setAttribute("x", svgPoint.x - size / 2);
-      useEl.setAttribute("y", svgPoint.y - size / 2);
+      useEl.setAttribute("x", localPoint.x - size / 2);
+      useEl.setAttribute("y", localPoint.y - size / 2);
       useEl.setAttribute("width", size);
       useEl.setAttribute("height", size);
-      // Use CSS currentColor trick
       useEl.style.color = currentColor;
+
       decorLayer.appendChild(useEl);
     }
 
@@ -506,6 +508,34 @@ caneScaleSlider.addEventListener("input", () => {
       if (layer) {
         layer.innerHTML = "";
       }
+    });
+
+    // Scaling helpers (scale about a chosen center point)
+    function updateScale(group, sliderValue, centerX, centerY) {
+      const s = parseFloat(sliderValue);
+      group.setAttribute(
+        "transform",
+        `translate(${centerX} ${centerY}) scale(${s}) translate(${-centerX} ${-centerY})`
+      );
+    }
+
+    // Initial centers chosen for visual centering
+    const caneCenterX = 100;
+    const caneCenterY = 150;
+    const ornamentCenterX = 110;
+    const ornamentCenterY = 140;
+
+    caneScaleSlider.addEventListener("input", () => {
+      updateScale(caneScaleGroup, caneScaleSlider.value, caneCenterX, caneCenterY);
+    });
+
+    ornamentScaleSlider.addEventListener("input", () => {
+      updateScale(
+        ornamentScaleGroup,
+        ornamentScaleSlider.value,
+        ornamentCenterX,
+        ornamentCenterY
+      );
     });
   </script>
 </body>
