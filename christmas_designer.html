@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<!--[1]: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element?utm_source=chatgpt.com "SVG element reference - MDN Web Docs - Mozilla"
+[2]: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/svg?utm_source=chatgpt.com "<svg> - SVG - MDN Web Docs"
+[3]: https://developer.mozilla.org/en-US/docs/Web/API/SVGUseElement?utm_source=chatgpt.com "SVGUseElement - Web APIs | MDN"
+[4]: https://www.sugar.org/blog/the-candy-cane-an-iconic-treat/?utm_source=chatgpt.com "The Candy Cane: A Delectable Dive into History and ..."
+[5]: https://en.wikipedia.org/wiki/Candy_cane?utm_source=chatgpt.com "Candy cane"
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Candy Cane And Christmas Ornament Designer</title>
+  <style>
+    :root {
+      --accent: #66bdf5;
+      --border-soft: #d0d0d0;
+      --bg: #ffffff;
+      --grid-dot: #e4e4e4;
+      --text: #111111;
+      --panel-width: 260px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .designer-shell {
+      max-width: 960px;
+      margin: 0 auto;
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 1.5rem;
+      background-image:
+        radial-gradient(circle at 1px 1px, var(--grid-dot) 1px, transparent 0);
+      background-size: 18px 18px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 1.5rem;
+      font-size: 1.4rem;
+      letter-spacing: 0.03em;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(220px, var(--panel-width)) 1fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    /* Palette */
+
+    .palette {
+      background: #e0f1ff;
+      border-radius: 12px;
+      padding: 0.9rem;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03);
+    }
+
+    .palette-inner {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+      min-height: 260px;
+    }
+
+    .palette h2 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      text-align: center;
+    }
+
+    .icon-btn {
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, box-shadow 0.15s ease,
+        transform 0.1s ease;
+    }
+
+    .icon-btn svg {
+      width: 70%;
+      height: 70%;
+      display: block;
+      color: var(--accent);
+    }
+
+    .icon-btn:hover {
+      background: rgba(102, 189, 245, 0.12);
+      box-shadow: 0 0 0 1px rgba(102, 189, 245, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .icon-btn.active {
+      background: rgba(102, 189, 245, 0.18);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .controls {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .controls label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .controls input[type="color"] {
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      background: transparent;
+    }
+
+    .hint {
+      font-size: 0.7rem;
+      line-height: 1.3;
+      opacity: 0.9;
+    }
+
+    /* Design canvases */
+
+    .panel {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 0.75rem;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .panel h2 {
+      font-size: 0.9rem;
+      margin: 0;
+      text-align: center;
+    }
+
+    .panel svg.design-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: transparent;
+      cursor: crosshair;
+      border-radius: 12px;
+    }
+
+    .panel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .btn-clear {
+      border-radius: 999px;
+      padding: 0.2rem 0.7rem;
+      border: 1px solid var(--border-soft);
+      background: #f9f9f9;
+      cursor: pointer;
+      font-size: 0.74rem;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-clear:hover {
+      background: #ffeef1;
+      border-color: #ffb2c2;
+    }
+
+    .legend {
+      margin-top: 1.2rem;
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .legend strong {
+      font-weight: 600;
+    }
+
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .palette {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG symbol library (hidden) -->
+  <svg width="0" height="0" style="position:absolute; visibility:hidden" aria-hidden="true">
+    <defs>
+      <!-- Diamond star -->
+      <symbol id="icon-star" viewBox="0 0 100 100">
+        <path class="icon-shape"
+          d="M50 8 L86 50 L50 92 L14 50 Z" />
+      </symbol>
+
+      <!-- Four-petal window -->
+      <symbol id="icon-window" viewBox="0 0 100 100">
+        <rect class="icon-shape" x="10" y="10" width="32" height="32" rx="8" />
+        <rect class="icon-shape" x="58" y="10" width="32" height="32" rx="8" />
+        <rect class="icon-shape" x="10" y="58" width="32" height="32" rx="8" />
+        <rect class="icon-shape" x="58" y="58" width="32" height="32" rx="8" />
+      </symbol>
+
+      <!-- Simple flower -->
+      <symbol id="icon-flower" viewBox="0 0 100 100">
+        <circle class="icon-shape" cx="50" cy="50" r="9" />
+        <g>
+          <circle class="icon-shape" cx="50" cy="22" r="10" />
+          <circle class="icon-shape" cx="72" cy="30" r="10" />
+          <circle class="icon-shape" cx="80" cy="50" r="10" />
+          <circle class="icon-shape" cx="72" cy="70" r="10" />
+          <circle class="icon-shape" cx="50" cy="78" r="10" />
+          <circle class="icon-shape" cx="28" cy="70" r="10" />
+          <circle class="icon-shape" cx="20" cy="50" r="10" />
+          <circle class="icon-shape" cx="28" cy="30" r="10" />
+        </g>
+      </symbol>
+
+      <!-- Celtic style knot -->
+      <symbol id="icon-knot" viewBox="0 0 100 100">
+        <path class="icon-shape"
+          d="M20 35 Q20 20 35 20 H65 Q80 20 80 35 V65 Q80 80 65 80 H35 Q20 80 20 65 Z
+             M35 35 H65 V65 H35 Z
+             M35 35 L65 65
+             M65 35 L35 65" />
+      </symbol>
+
+      <!-- Tulip -->
+      <symbol id="icon-tulip" viewBox="0 0 100 100">
+        <path class="icon-shape"
+          d="M25 80 Q25 55 25 30 L40 45 L50 30 L60 45 L75 30 Q75 55 75 80 Z" />
+        <line class="icon-shape" x1="50" y1="80" x2="50" y2="95" />
+      </symbol>
+
+      <!-- Leaf swirl -->
+      <symbol id="icon-leaf" viewBox="0 0 100 100">
+        <path class="icon-shape"
+          d="M25 70 Q10 45 40 30 Q70 15 80 25 Q70 40 50 45
+             Q30 50 25 70 Z" />
+        <path class="icon-shape"
+          d="M50 45 Q55 55 65 60 Q75 65 82 65" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="designer-shell" aria-label="Candy cane and ornament designer">
+    <h1>Candy Cane And Christmas Ornament Designer</h1>
+
+    <div class="layout">
+      <!-- Palette column -->
+      <section class="palette" aria-label="Decorative icons palette">
+        <h2>Decor Palette</h2>
+        <div class="palette-inner">
+          <button class="icon-btn" data-symbol="icon-star" aria-label="Diamond star">
+            <svg viewBox="0 0 100 100">
+              <use href="#icon-star"></use>
+            </svg>
+          </button>
+          <button class="icon-btn" data-symbol="icon-window" aria-label="Window motif">
+            <svg viewBox="0 0 100 100">
+              <use href="#icon-window"></use>
+            </svg>
+          </button>
+          <button class="icon-btn" data-symbol="icon-flower" aria-label="Flower">
+            <svg viewBox="0 0 100 100">
+              <use href="#icon-flower"></use>
+            </svg>
+          </button>
+          <button class="icon-btn" data-symbol="icon-knot" aria-label="Knot">
+            <svg viewBox="0 0 100 100">
+              <use href="#icon-knot"></use>
+            </svg>
+          </button>
+          <button class="icon-btn" data-symbol="icon-tulip" aria-label="Tulip">
+            <svg viewBox="0 0 100 100">
+              <use href="#icon-tulip"></use>
+            </svg>
+          </button>
+          <button class="icon-btn" data-symbol="icon-leaf" aria-label="Leaf">
+            <svg viewBox="0 0 100 100">
+              <use href="#icon-leaf"></use>
+            </svg>
+          </button>
+        </div>
+
+        <div class="controls">
+          <label>
+            Color
+            <input type="color" id="colorPicker" value="#66bdf5" aria-label="Decoration color">
+          </label>
+          <div class="hint">
+            1. Select an icon<br>
+            2. Click on the cane or ornament to stamp
+          </div>
+        </div>
+      </section>
+
+      <!-- Candy cane panel -->
+      <section class="panel" aria-label="Candy cane designer">
+        <h2>Candy Cane</h2>
+        <svg id="candySvg" class="design-svg" viewBox="0 0 200 260">
+          <!-- Base cane shape -->
+          <path d="M80 250 L80 130 Q80 70 130 70 Q160 70 170 85 L170 120
+                   L160 120 L160 90 Q150 80 130 80 Q90 80 90 130 L90 250 Z"
+                fill="#ffffff"
+                stroke="#111111"
+                stroke-width="4"
+                stroke-linejoin="round" />
+          <!-- Decorative layer -->
+          <g class="decor-layer"></g>
+        </svg>
+        <div class="panel-footer">
+          <span>Click anywhere on the cane area to add motifs.</span>
+          <button class="btn-clear" id="clearCandy">Clear cane</button>
+        </div>
+      </section>
+
+      <!-- Ornament panel -->
+      <section class="panel" aria-label="Ornament designer">
+        <h2>Christmas Ornament</h2>
+        <svg id="ornamentSvg" class="design-svg" viewBox="0 0 220 220">
+          <!-- Ornament cap and hook -->
+          <path d="M110 20
+                   C140 20 150 45 135 65"
+                fill="none"
+                stroke="#111111"
+                stroke-width="4"
+                stroke-linecap="round" />
+          <rect x="90" y="65" width="40" height="18" rx="4"
+                fill="#ffffff"
+                stroke="#111111"
+                stroke-width="4" />
+          <!-- Ornament circle -->
+          <circle cx="110" cy="140" r="70"
+                  fill="#ffffff"
+                  stroke="#66bdf5"
+                  stroke-width="10" />
+          <!-- Decorative layer -->
+          <g class="decor-layer"></g>
+        </svg>
+        <div class="panel-footer">
+          <span>Stamp icons inside the ornament ring.</span>
+          <button class="btn-clear" id="clearOrnament">Clear ornament</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="legend">
+      <strong>How it works:</strong> This tool uses inline SVG symbols and the
+      <code>&lt;use&gt;</code> element so that each decorative icon can be cloned
+      and recolored without additional image files. Click a symbol in the palette,
+      pick a color, and then click anywhere in the candy cane or ornament SVG to
+      place a copy. The designs remain vector based, so they are suitable for
+      scaling, printing, or exporting as SVG for other creative work.
+    </div>
+  </div>
+
+  <script>
+    // Shared SVG namespace
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const XLINK_NS = "http://www.w3.org/1999/xlink";
+
+    const paletteButtons = document.querySelectorAll(".icon-btn");
+    const colorPicker = document.getElementById("colorPicker");
+    const candySvg = document.getElementById("candySvg");
+    const ornamentSvg = document.getElementById("ornamentSvg");
+    const clearCandy = document.getElementById("clearCandy");
+    const clearOrnament = document.getElementById("clearOrnament");
+
+    let selectedSymbolId = null;
+    let currentColor = colorPicker.value;
+
+    // Style for icon strokes and fills via currentColor
+    const styleEl = document.createElement("style");
+    styleEl.textContent = `
+      .icon-shape {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    `;
+    document.head.appendChild(styleEl);
+
+    // Palette selection logic
+    paletteButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedSymbolId = btn.dataset.symbol;
+        paletteButtons.forEach((b) => b.classList.toggle("active", b === btn));
+      });
+    });
+
+    // Color picker
+    colorPicker.addEventListener("input", (evt) => {
+      currentColor = evt.target.value;
+    });
+
+    // Helper: convert mouse click to SVG coordinates
+    function svgPointFromEvent(svg, evt) {
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX;
+      pt.y = evt.clientY;
+      const matrix = svg.getScreenCTM();
+      if (!matrix) {
+        return null;
+      }
+      return pt.matrixTransform(matrix.inverse());
+    }
+
+    // Helper: stamp an icon onto an SVG
+    function handleStamp(evt) {
+      if (!selectedSymbolId) {
+        return; // nothing selected
+      }
+      const svg = evt.currentTarget;
+      const decorLayer = svg.querySelector(".decor-layer");
+      if (!decorLayer) {
+        return;
+      }
+
+      const svgPoint = svgPointFromEvent(svg, evt);
+      if (!svgPoint) {
+        return;
+      }
+
+      const useEl = document.createElementNS(SVG_NS, "use");
+      useEl.setAttributeNS(XLINK_NS, "href", "#" + selectedSymbolId);
+      // Place icon centered at click
+      const size = 34;
+      useEl.setAttribute("x", svgPoint.x - size / 2);
+      useEl.setAttribute("y", svgPoint.y - size / 2);
+      useEl.setAttribute("width", size);
+      useEl.setAttribute("height", size);
+      // Use CSS currentColor trick
+      useEl.style.color = currentColor;
+      decorLayer.appendChild(useEl);
+    }
+
+    candySvg.addEventListener("click", handleStamp);
+    ornamentSvg.addEventListener("click", handleStamp);
+
+    // Clear buttons
+    clearCandy.addEventListener("click", () => {
+      const layer = candySvg.querySelector(".decor-layer");
+      if (layer) {
+        layer.innerHTML = "";
+      }
+    });
+
+    clearOrnament.addEventListener("click", () => {
+      const layer = ornamentSvg.querySelector(".decor-layer");
+      if (layer) {
+        layer.innerHTML = "";
+      }
+    });
+  </script>
+</body>
+</html>
